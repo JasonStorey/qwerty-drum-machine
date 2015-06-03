@@ -78,7 +78,11 @@ Trigger.prototype = {
         this.keyCodeContainer = document.createElement('h3');
         this.startButton = document.createElement('button');
         this.stopButton = document.createElement('button');
+        this.startSlider = document.createElement('input');
         this.labelContainer = document.createElement('h3');
+
+
+        //<input id="slider1" type="range" min="100" max="500" step="10" />
 
         this.display.innerHTML = 'No sample';
         this.keyCodeContainer.innerHTML = String.fromCharCode(this.keyCode);
@@ -94,12 +98,20 @@ Trigger.prototype = {
             this.stopRecording();
         }.bind(this));
 
+        this.startSlider.disabled = true;
+        this.startSlider.type = 'range';
+        this.startSlider.min = 0;
+        this.startSlider.max = 10;
+        this.startSlider.step = 0.01;
+        this.startSlider.value = 0;
+
         this.labelContainer.innerHTML = this.label;
 
         this.container.appendChild(this.display);
         this.container.appendChild(this.keyCodeContainer);
         this.container.appendChild(this.startButton);
         this.container.appendChild(this.stopButton);
+        this.container.appendChild(this.startSlider);
         this.container.appendChild(this.labelContainer);
 
         this.container.className = 'trigger';
@@ -124,6 +136,8 @@ Trigger.prototype = {
         this.recorder.getBuffer(function(buffer) {
             this.buffer = getAudioBufferFromData(2, buffer);
             this.display.innerHTML = 'Sample Loaded';
+            this.startSlider.disabled = false;
+            this.startSlider.max = this.buffer.duration;
         }.bind(this));
 
         this.recorder.clear();
@@ -135,7 +149,7 @@ Trigger.prototype = {
         this.source = audioContext.createBufferSource();
         this.source.buffer = this.buffer;
         this.source.connect(audioContext.destination);
-        this.source.start(0);
+        this.source.start(0, this.startSlider.value);
         this.playing = true;
         this.container.classList.add('playing');
     },
