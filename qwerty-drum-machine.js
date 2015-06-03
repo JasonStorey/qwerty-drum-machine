@@ -31,13 +31,21 @@ function startUserMedia(stream) {
 
 function initQDM(recorder) {
     var triggers = [],
-        KEY_CODES = [65, 83, 68, 70, 71, 72, 74, 75, 76];
+        KEY_CODES = [65, 83, 68, 70, 71, 72, 74, 75, 76],
+        audioBufferCache = new AudioBufferCache();
+
+    audioBufferCache.onUpdate(function() {
+        triggers.forEach(function(trigger) {
+            trigger.update();
+        });
+    });
 
     for(var i = 0; i < KEY_CODES.length; i++) {
         triggers.push(new Trigger({
             keyCode: KEY_CODES[i],
             recorder: recorder,
-            label: 'Trigger #' + i
+            label: 'Trigger #' + i,
+            audioBufferCache: audioBufferCache
         }));
 
         triggers[i].init();
@@ -67,6 +75,7 @@ function initQDM(recorder) {
 function Trigger(options) {
     this.keyCode = options.keyCode;
     this.recorder = options.recorder;
+    this.audioBufferCache = options.audioBufferCache;
     this.playing = false;
     this.label = options.label;
 }
@@ -74,17 +83,21 @@ function Trigger(options) {
 Trigger.prototype = {
     init: function() {
         this.container = document.createElement('div');
-        this.display = document.createElement('div');
+        this.dropDown = document.createElement('select');
         this.keyCodeContainer = document.createElement('h3');
         this.startButton = document.createElement('button');
         this.stopButton = document.createElement('button');
         this.startSlider = document.createElement('input');
         this.labelContainer = document.createElement('h3');
 
+        this.container.className = 'trigger';
 
-        //<input id="slider1" type="range" min="100" max="500" step="10" />
+        this.dropDown.addEventListener('change', function(event) {
+            var selectedIndex = event.target.selectedIndex;
+            this.buffer = this.audioBufferCache.getBufferByIndex(selectedIndex);
+            this.update();
+        }.bind(this));
 
-        this.display.innerHTML = 'No sample';
         this.keyCodeContainer.innerHTML = String.fromCharCode(this.keyCode);
 
         this.startButton.innerHTML = 'record';
@@ -107,37 +120,52 @@ Trigger.prototype = {
 
         this.labelContainer.innerHTML = this.label;
 
-        this.container.appendChild(this.display);
+        this.update();
+
+        this.container.appendChild(this.dropDown);
         this.container.appendChild(this.keyCodeContainer);
         this.container.appendChild(this.startButton);
         this.container.appendChild(this.stopButton);
         this.container.appendChild(this.startSlider);
         this.container.appendChild(this.labelContainer);
 
-        this.container.className = 'trigger';
+    },
+    update: function() {
+        var buffers = this.audioBufferCache.getBuffers();
+
+        while (this.dropDown.hasChildNodes()) {
+            this.dropDown.removeChild(this.dropDown.lastChild);
+        }
+
+        buffers.forEach(function(buffer, index) {
+            this.dropDown.appendChild(new Option(buffer.name, index));
+        }.bind(this));
+
+        if(this.buffer) {
+            this.startSlider.disabled = false;
+            this.startSlider.max = this.buffer.bufferNode.duration;
+            this.dropDown.selectedIndex = this.buffer.index;
+        } else {
+            this.startSlider.disabled = true;
+        }
     },
     draw: function() {
         document.body.appendChild(this.container);
     },
     startRecording: function() {
-        this.recorder.record();
         this.startButton.disabled = true;
         this.stopButton.disabled = false;
-        console.log('Recording...');
+
+        this.recorder.record();
     },
     stopRecording: function() {
-        this.recorder.stop();
-        this.stopButton.disabled = true;
         this.startButton.disabled = false;
-        this.display.innerHTML = 'Loading Sample';
+        this.stopButton.disabled = true;
 
-        console.log('Stopped recording.');
-
-        this.recorder.getBuffer(function(buffer) {
-            this.buffer = getAudioBufferFromData(2, buffer);
-            this.display.innerHTML = 'Sample Loaded';
-            this.startSlider.disabled = false;
-            this.startSlider.max = this.buffer.duration;
+        this.recorder.stop();
+        this.recorder.getBuffer(function(data) {
+            this.buffer = this.audioBufferCache.addBufferFromData(data);
+            this.update();
         }.bind(this));
 
         this.recorder.clear();
@@ -148,7 +176,7 @@ Trigger.prototype = {
             return;
         }
         this.source = audioContext.createBufferSource();
-        this.source.buffer = this.buffer;
+        this.source.buffer = this.buffer.bufferNode;
         this.source.connect(audioContext.destination);
         this.source.start(0, this.startSlider.value);
         this.playing = true;
@@ -160,6 +188,38 @@ Trigger.prototype = {
         }
         this.source.stop();
         this.playing = false;
+    }
+};
+
+function AudioBufferCache() {
+    this.buffers = [];
+}
+
+AudioBufferCache.prototype = {
+    addBufferFromData: function(data, name) {
+        var bufferNode = getAudioBufferFromData(2, data);
+        var buffer = {
+            index: this.buffers.length,
+            name: name || 'Sample #' + this.buffers.length,
+            bufferNode: bufferNode
+        };
+
+        this.buffers.push(buffer);
+
+        if(this.updateListener) {
+            this.updateListener(this);
+        }
+
+        return buffer;
+    },
+    getBufferByIndex: function(index) {
+        return this.buffers[index];
+    },
+    getBuffers: function() {
+        return this.buffers;
+    },
+    onUpdate: function(cb) {
+        this.updateListener = cb;
     }
 };
 
