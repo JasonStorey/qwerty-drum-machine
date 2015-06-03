@@ -143,6 +143,7 @@ Trigger.prototype = {
         this.recorder.clear();
     },
     startSource: function() {
+        this.container.classList.add('active');
         if(this.playing || !this.buffer) {
             return;
         }
@@ -151,15 +152,14 @@ Trigger.prototype = {
         this.source.connect(audioContext.destination);
         this.source.start(0, this.startSlider.value);
         this.playing = true;
-        this.container.classList.add('playing');
     },
     stopSource: function() {
+        this.container.classList.remove('active');
         if(!this.playing) {
             return;
         }
         this.source.stop();
         this.playing = false;
-        this.container.classList.remove('playing');
     }
 };
 
