@@ -1,18 +1,4 @@
 var audioContext;
-var recorder;
-var recordingslist = document.createElement('ul');
-
-document.body.appendChild(recordingslist);
-
-function startUserMedia(stream) {
-    var input = audioContext.createMediaStreamSource(stream);
-    console.log('Media stream created.');
-    //input.connect(audioContext.destination);
-
-    recorder = new Recorder(input);
-    console.log('Recorder initialised.');
-    init();
-}
 
 window.onload = function init() {
     try {
@@ -32,6 +18,26 @@ window.onload = function init() {
         console.log('No live audio input: ' + e);
     });
 };
+
+function startUserMedia(stream) {
+    var input = audioContext.createMediaStreamSource(stream);
+    console.log('Media stream created.');
+    //input.connect(audioContext.destination);
+
+    var recorder = new Recorder(input);
+    console.log('Recorder initialised.');
+    initQDM(recorder);
+}
+
+function initQDM(recorder) {
+    var trigger = new Trigger({
+        keyCode:65,
+        recorder: recorder
+    });
+
+    trigger.init();
+    trigger.draw();
+}
 
 function Trigger(options) {
     this.keyCode = options.keyCode;
@@ -99,13 +105,3 @@ Trigger.prototype = {
         this.recorder.clear();
     }
 };
-
-function init() {
-    var trigger = new Trigger({
-        keyCode:65,
-        recorder: recorder
-    });
-
-    trigger.init();
-    trigger.draw();
-}
