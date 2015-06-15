@@ -8,11 +8,35 @@
             margin: 0;
             padding: 0;
         }
+
+        html,body {
+            height: 100%;
+            background-color: #6DDCDD;
+        }
+
+        .content {
+            width: 840px;
+            margin: 40px auto;
+            padding: 50px;
+            background-color: #fff;
+            box-shadow: 15px 15px 0 0 #A8A8A8;
+            transition: box-shadow .1s,top .1s,left .1s;
+        }
+        #controlsContainer {
+            height: 100px;
+        }
+
+        #triggersContainer:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
         .trigger {
             position: relative;
             float: left;
-            width: 140px;
-            height: 140px;
+            width: 70px;
+            height: 120px;
             background-color: #A8A8A8;
             border: solid 5px #949494;
             margin: 2px;
@@ -22,12 +46,16 @@
             text-align: center;
         }
 
+        .trigger:nth-child(11), .trigger:nth-child(20){
+            clear: left;
+        }
+
         .trigger.active {
-            background-color: rgb(20, 183, 253);
+            background-color: #6DDCDD;
         }
 
         .trigger.selected {
-            border-color: rgb(20, 183, 253);
+            border-color: #6DDCDD;
         }
 
         .trigger .sample-display {
@@ -35,29 +63,38 @@
             width: 100%;
             margin: 10px 0;
             top: 0;
-            font-size: 12px;
-            line-height: 12px;
+            font-size: 10px;
+            line-height: 10px;
         }
         .trigger .key-code-container {
             font-size: 40px;
-            line-height: 140px;
+            line-height: 120px;
         }
         .trigger .label-container {
             position: absolute;
             width: 100%;
             margin: 10px 0;
             bottom: 0;
-            font-size: 12px;
-            line-height: 12px;
+            font-size: 10px;
+            line-height: 10px;
         }
     </style>
 </head>
 <body>
+    <div class="content">
+        <div id="controlsContainer"></div>
+        <div id="triggersContainer"></div>
+    </div>
+
     <script src="./recorder.js"></script>
     <script src="./dist/qwerty-drum-machine.js"></script>
 
     <script>
-        QDM.init(window.Recorder);
+        QDM.init({
+            recorder: window.Recorder,
+            triggersContainer: document.getElementById('triggersContainer'),
+            controlsContainer: document.getElementById('controlsContainer')
+        });
     </script>
 </body>
 </html>
