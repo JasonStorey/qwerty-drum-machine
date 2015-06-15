@@ -4,21 +4,51 @@
     <meta charset="UTF-8">
     <title>QWERTY Drum Machine</title>
     <style>
+        html,body,div {
+            margin: 0;
+            padding: 0;
+        }
         .trigger {
             position: relative;
             float: left;
-            width: 190px;
-            background-color: #66fb11;
-            border: solid 4px #66fb11;
+            width: 140px;
+            height: 140px;
+            background-color: #A8A8A8;
+            border: solid 5px #949494;
             margin: 2px;
+            cursor: pointer;
+            font-family: Futura,"Trebuchet MS",Arial,sans-serif;
+            color: #fff;
+            text-align: center;
         }
 
         .trigger.active {
-            background-color: #4bb80c;
+            background-color: rgb(20, 183, 253);
         }
 
         .trigger.selected {
-            border-color: rgb(94, 0, 255);
+            border-color: rgb(20, 183, 253);
+        }
+
+        .trigger .sample-display {
+            position: absolute;
+            width: 100%;
+            margin: 10px 0;
+            top: 0;
+            font-size: 12px;
+            line-height: 12px;
+        }
+        .trigger .key-code-container {
+            font-size: 40px;
+            line-height: 140px;
+        }
+        .trigger .label-container {
+            position: absolute;
+            width: 100%;
+            margin: 10px 0;
+            bottom: 0;
+            font-size: 12px;
+            line-height: 12px;
         }
     </style>
 </head>
