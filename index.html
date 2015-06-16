@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <title>QWERTY Drum Machine</title>
     <style>
-        html,body,div {
+        html,body,div,label {
             margin: 0;
             padding: 0;
         }
 
+        label {
+            cursor: pointer;
+        }
+
         html,body {
             height: 100%;
-            /*background-color: #6DDCDD;*/
             background: url(./small_steps.png);
+            color: #949494;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 12px;
+            font-family: Futura,"Trebuchet MS",Arial,sans-serif;
         }
 
         .content {
@@ -24,35 +32,43 @@
             box-shadow: 15px 15px 0 0 rgba(0,0,0,0.3);
             transition: box-shadow .1s,top .1s,left .1s;
         }
+
         #controlsContainer {
-            height: 100px;
+            margin-bottom: 15px;
         }
 
         .audio-buffer-cache {
             height: 25px;
-        }
-
-        .audio-buffer-cache select {
             width: 164px;
             margin: 2px;
         }
 
+        .audio-buffer-cache select {
+            width: 100%;
+        }
+
         .audio-buffer-recorder {
             height: 25px;
+            width: 164px;
+            margin: 2px;
         }
 
         .audio-buffer-recorder button {
             width: 80px;
-            margin: 2px;
         }
 
         .audio-buffer-recorder button:disabled {
             display: none;
         }
 
-        .audio-buffer-trimmer input {
+        .audio-buffer-trimmer {
             width: 164px;
             margin: 2px;
+        }
+
+        .audio-buffer-trimmer input {
+            width: 100%;
+            margin: 2px 0;
         }
 
         #triggersContainer:after {
@@ -70,7 +86,6 @@
             border: solid 5px #949494;
             margin: 2px;
             cursor: pointer;
-            font-family: Futura,"Trebuchet MS",Arial,sans-serif;
             color: #fff;
             text-align: center;
         }
