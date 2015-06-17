@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <title>QWERTY Drum Machine</title>
     <style>
-        html,body,div,label {
+        html,body,div,label,input,button {
             margin: 0;
             padding: 0;
+        }
+
+        html,body,label,input,button,option,select {
+            color: #949494;
+            font-size: 12px;
+            font-weight: normal;
+            font-family: Futura,"Trebuchet MS",Arial,sans-serif;
         }
 
         label {
@@ -16,11 +23,6 @@
         html,body {
             height: 100%;
             background: url(./small_steps.png);
-            color: #949494;
-            font-size: 12px;
-            font-weight: normal;
-            line-height: 12px;
-            font-family: Futura,"Trebuchet MS",Arial,sans-serif;
         }
 
         .content {
@@ -58,6 +60,8 @@
 
         .audio-buffer-recorder button {
             width: 80px;
+            padding: 3px 0;
+            cursor: pointer;
         }
 
         .audio-buffer-recorder button:disabled {
