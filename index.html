@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>QWERTY Drum Machine</title>
     <style>
-        html,body,div,label,input,button {
+        html,body,div,label,input,button,img {
             margin: 0;
             padding: 0;
         }
@@ -22,7 +22,7 @@
 
         html,body {
             height: 100%;
-            background: url(./small_steps.png);
+            background: url(./assets/small_steps.png);
         }
 
         .content {
@@ -35,7 +35,19 @@
             transition: box-shadow .1s,top .1s,left .1s;
         }
 
+        #logoContainer {
+            float:left;
+            width: 164px;
+            margin: 0 2px;
+        }
+
+        #logoContainer img {
+            width: 100px;
+            height: auto;
+        }
+
         #controlsContainer {
+            margin-top: 3px;
             margin-bottom: 15px;
             min-height: 40px;
         }
@@ -114,11 +126,12 @@
         }
 
         .trigger.active {
-            background-color: #6DDCDD;
+            background-color: #6DC065;
+            border-color: #6DC065;
         }
 
         .trigger.selected {
-            border-color: #6DDCDD;
+            border-color: #3989C9;
         }
 
         .trigger .sample-display {
@@ -157,6 +170,9 @@
 </head>
 <body>
     <div class="content">
+        <div id="logoContainer">
+            <img src="./assets/qdm-logo.png" />
+        </div>
         <div id="controlsContainer"></div>
         <div id="triggersContainer"></div>
     </div>
