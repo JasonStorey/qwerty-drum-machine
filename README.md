@@ -1,8 +1,8 @@
 # qwerty-drum-machine
 
-<a href="http://jasonstorey.co.uk/demos/qwerty-drum-machine/" title="qwerty drum machine" alt="qwerty drum machine">QDM</a> : Record, edit, and play audio samples straight from your browser (or, more accurately, Chrome).
+<a href="http://jasonstorey.co.uk/demos/qwerty-drum-machine/" target="_blank" title="qwerty drum machine" alt="qwerty drum machine">QDM</a> : Record, edit, and play audio samples straight from your browser (or, more accurately, Chrome).
 
-<a href="http://jasonstorey.co.uk/demos/qwerty-drum-machine/" title="qwerty drum machine"><img src="http://jasonstorey.co.uk/demos/qwerty-drum-machine/qdm-screenshot.png" /></a>
+<a href="http://jasonstorey.co.uk/demos/qwerty-drum-machine/" target="_blank" title="qwerty drum machine" alt="qwerty drum machine"><img src="http://jasonstorey.co.uk/demos/qwerty-drum-machine/qdm-screenshot.png" /></a>
 
 # Features
 
